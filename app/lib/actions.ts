@@ -19,6 +19,7 @@ const FormSchema = z.object({
   }),
   date: z.string(),
 });
+
 export type State = {
   errors?: {
     customerId?: string[];
@@ -27,6 +28,7 @@ export type State = {
   };
   message?: string | null;
 };
+
 const CreateInvoice = FormSchema.omit({ id: true, date: true });
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form using Zod
@@ -35,7 +37,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
     amount: formData.get("amount"),
     status: formData.get("status"),
   });
-
+  
   // If form validation fails, return errors early. Otherwise, continue.
   if (!validatedFields.success) {
     return {
@@ -55,7 +57,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
       INSERT INTO invoices (customer_id, amount, status, date)
       VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
     `;
-  } catch (error) {
+  } catch {
     // If a database error occurs, return a more specific error.
     return {
       message: "Database Error: Failed to Create Invoice.",
@@ -94,7 +96,7 @@ export async function updateInvoice(
       SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
       WHERE id = ${id}
     `;
-  } catch (error) {
+  } catch  {
     return { message: "Database Error: Failed to Update Invoice." };
   }
 
@@ -105,7 +107,7 @@ export async function deleteInvoice(id: string) {
   // throw new Error('Failed to Delete Invoice');
   try {
     await sql`DELETE FROM invoices WHERE id = ${id}`;
-  } catch (error) {
+  } catch  {
     return { message: "Database Error: Failed to delete Invoice." };
   }
 

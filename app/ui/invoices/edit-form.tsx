@@ -26,7 +26,13 @@ export default function EditInvoiceForm({
     // Passing an id as argument won't work
     <form action={formAction}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
-        {/* Customer Name */}
+      {state.errors && Object.keys(state.errors).length > 0 && (
+          <div className="mb-4 text-red-600">
+            {Object.values(state.errors).map((errorList, index) => 
+              errorList.map((error) => <p key={error + index}>{error}</p>)
+            )}
+          </div>
+        )}
         <div className="mb-4">
           <label htmlFor="customer" className="mb-2 block text-sm font-medium">
             Choose customer
